@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Galería Fotográfica</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #2c2c2c;
+  display: flex;
+  justify-content: center;
+}
+
+.contenedor {
+  background: #3a3a3a;
+  margin: 30px;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 900px;
+  text-align: center;
+}
+
+h2 {
+  color: white;
+}
+
+/* IMAGEN PRINCIPAL */
+.principal {
+  max-width: 100%;
+  max-height: 500px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  background: black;
+  border-radius: 10px;
+
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* ANIMACIONES */
+.fade-out {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.fade-in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* BOTONES */
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  background: #e0e0e0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  background: #ffffff;
+}
+
+/* CONTADOR */
+.contador {
+  color: white;
+}
+
+/* MINIATURAS */
+.miniaturas {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.miniaturas img {
+  width: 80px;
+  height: 60px;
+  object-fit: contain;
+  background: black;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.3s;
+}
+
+.miniaturas img:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* ACTIVA */
+.activa {
+  border: 2px solid white;
+  opacity: 1;
+  transform: scale(1.1);
+}
+</style>
+
+</head>
+<body>
+
+<div class="contenedor">
+
+  <h2>Galería Fotográfica</h2>
+
+  <img id="imagen" class="principal fade-in" src="img1.jpeg">
+
+  <div>
+    <button onclick="anterior()">⬅ Anterior</button>
+    <button onclick="siguiente()">Siguiente ➡</button>
+  </div>
+
+  <div class="contador" id="contador"></div>
+
+  <div class="miniaturas" id="miniaturas"></div>
+
+</div>
+
+<script>
+
+let imagenes = [
+  "img1.jpeg","img2.jpeg","img3.jpeg","img4.jpeg","img5.jpeg",
+  "img6.jpeg","img7.jpeg","img8.jpeg","img9.jpeg","img10.jpeg",
+  "img11.jpeg","img12.jpeg","img13.jpeg","img14.jpeg","img15.jpeg",
+  "img16.jpeg","img17.jpeg","img18.jpeg","img19.jpeg","img20.jpeg",
+  "img21.jpeg","img22.jpeg","img23.jpeg","img24.jpeg","img25.jpeg",
+  "img26.jpeg","img27.jpeg","img28.jpeg","img29.jpeg"
+];
+
+let indice = 0;
+let img = document.getElementById("imagen");
+let miniCont = document.getElementById("miniaturas");
+
+// CREAR MINIATURAS
+imagenes.forEach((src, i) => {
+  let mini = document.createElement("img");
+  mini.src = src;
+  mini.onclick = () => cambiarImagen(i);
+  miniCont.appendChild(mini);
+});
+
+// CAMBIO CON ANIMACIÓN
+function cambiarImagen(nuevo) {
+  img.classList.remove("fade-in");
+  img.classList.add("fade-out");
+
+  setTimeout(() => {
+    indice = nuevo;
+    img.src = imagenes[indice];
+    actualizar();
+
+    img.classList.remove("fade-out");
+    img.classList.add("fade-in");
+  }, 300);
+}
+
+// SIGUIENTE
+function siguiente() {
+  cambiarImagen((indice + 1) % imagenes.length);
+}
+
+// ANTERIOR
+function anterior() {
+  cambiarImagen((indice - 1 + imagenes.length) % imagenes.length);
+}
+
+// ACTUALIZAR
+function actualizar() {
+  document.getElementById("contador").innerText =
+    "Imagen " + (indice + 1) + " de " + imagenes.length;
+
+  document.querySelectorAll(".miniaturas img").forEach((el, i) => {
+    el.classList.toggle("activa", i === indice);
+  });
+}
+
+// INICIO
+actualizar();
+
+</script>
+
+</body>
+</html>
